@@ -30,28 +30,34 @@ The value for a configuration variable should be specified via an environment va
 
 | Name | Required | Format | Description |
 |----- | -------- | ------ | ----------- |
-| USER_API_ENDPOINT | Yes | "http://endpoint.you.specify(:port)" | The FQDN of the `userprofile` API endpoint. |
+| USERPROFILE_API_ENDPOINT | Yes | "http://endpoint.you.specify(:port)" | The FQDN of the `userprofile` API endpoint. |
 | TRIPS_API_ENDPOINT | Yes | "http://endpoint.you.specify(:port)" | The FQDN of the `trips` API endpoint. |
 | BING_MAPS_KEY | No | \<guid\> | A Bing Maps API key |
 
 ## Run in Docker
 
-To build the image
+Simple build:
+
+```
+docker build -f Dockerfile -t "tripinsights/tripviewer:1.0" .
+```
+
+To build the image for release:
 
 Bash
 ```bash
-$ docker build --no-cache --build-arg IMAGE_VERSION="1.0" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "tripinsights/tripviewer:1.0" .
+docker build --no-cache --build-arg IMAGE_VERSION="1.0" --build-arg IMAGE_CREATE_DATE="`date -u +"%Y-%m-%dT%H:%M:%SZ"`" --build-arg IMAGE_SOURCE_REVISION="`git rev-parse HEAD`" -f Dockerfile -t "tripinsights/tripviewer:1.0" .
 ```
 
 Powershell
 ```powershell
-PS> docker build --no-cache --build-arg IMAGE_VERSION="1.0" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "tripinsights/tripviewer:1.0" .
+docker build --no-cache --build-arg IMAGE_VERSION="1.0" --build-arg IMAGE_CREATE_DATE="$(Get-Date((Get-Date).ToUniversalTime()) -UFormat '%Y-%m-%dT%H:%M:%SZ')" --build-arg IMAGE_SOURCE_REVISION="$(git rev-parse HEAD)" -f Dockerfile -t "tripinsights/tripviewer:1.0" .
 ```
 
 To run the image
 
 ```bash
-$ docker run -d -p 8080:80 --name tripviewer -e "USER_API_ENDPOINT=http://$ENDPOINT" -e "TRIPS_API_ENDPOINT=http://$ENDPOINT" tripinsights/tripviewer:1.0
+docker run -d -p 8080:80 --name tripviewer -e "USERPROFILE_API_ENDPOINT=http://$ENDPOINT" -e "TRIPS_API_ENDPOINT=http://$ENDPOINT" tripinsights/tripviewer:1.0
 ```
 
 ## Testing
